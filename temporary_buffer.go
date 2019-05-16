@@ -48,6 +48,18 @@ func (tb *temporaryBuffer) Size() int64 {
 	return int64(len(tb.buffer))
 }
 
+func (tb *temporaryBuffer) Type() string {
+	return TemporaryBuffer
+}
+
+func (tb *temporaryBuffer) Name() string {
+	return ""
+}
+
+func (tb *temporaryBuffer) Bytes() []byte {
+	return tb.buffer
+}
+
 func (tb *temporaryBuffer) tryGrowByReslice(n int) (int, bool) {
 	var l int = len(tb.buffer)
 	if l+n <= cap(tb.buffer) {

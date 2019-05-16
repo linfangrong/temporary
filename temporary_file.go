@@ -38,6 +38,18 @@ func (tf *temporaryFile) Size() int64 {
 	return tf.size
 }
 
+func (tf *temporaryFile) Type() string {
+	return TemporaryFile
+}
+
+func (tf *temporaryFile) Name() string {
+	return tf.file.Name()
+}
+
+func (tf *temporaryFile) Bytes() []byte {
+	return []byte{}
+}
+
 func (tf *temporaryFile) Write(p []byte) (n int, err error) {
 	n, err = tf.file.Write(p)
 	tf.size += int64(n)
