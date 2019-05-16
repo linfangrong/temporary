@@ -50,6 +50,10 @@ func (tf *temporaryFile) Bytes() []byte {
 	return []byte{}
 }
 
+func (tf *temporaryFile) Sync() (err error) {
+	return tf.file.Sync()
+}
+
 func (tf *temporaryFile) Write(p []byte) (n int, err error) {
 	n, err = tf.file.Write(p)
 	tf.size += int64(n)

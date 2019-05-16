@@ -60,6 +60,10 @@ func (tb *temporaryBuffer) Bytes() []byte {
 	return tb.buffer
 }
 
+func (tb *temporaryBuffer) Sync() (err error) {
+	return
+}
+
 func (tb *temporaryBuffer) tryGrowByReslice(n int) (int, bool) {
 	var l int = len(tb.buffer)
 	if l+n <= cap(tb.buffer) {

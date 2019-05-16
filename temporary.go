@@ -35,6 +35,7 @@ type temporaryItemer interface {
 	Type() string
 	Name() string
 	Bytes() []byte
+	Sync() error
 	io.Writer
 	io.Reader
 	io.Seeker
@@ -65,6 +66,9 @@ func NewTemporary(reader io.Reader, maxBufferSize int64, fileDir string, filePat
 	if _, err = io.Copy(temp, reader); err != nil {
 		return
 	}
+	if err = temp.Sync(); err != nil {
+		return
+	}
 	return temp, nil
 }
 
@@ -81,6 +85,9 @@ func NewAsyncTemporary(reader io.Reader, maxBufferSize int64, fileDir string, fi
 	temp.itemWg.Add(1)
 	go func(temp *temporary, reader io.Reader) {
 		if _, temp.itemAsyncErr = io.Copy(temp, reader); temp.itemAsyncErr != nil {
+			goto end
+		}
+		if temp.itemAsyncErr = temp.Sync(); temp.itemAsyncErr != nil {
 			goto end
 		}
 	end:
@@ -102,6 +109,9 @@ func NewMustCloseReaderAsyncTemporary(readcloser io.ReadCloser, maxBufferSize in
 	temp.itemWg.Add(1)
 	go func(temp *temporary, readcloser io.ReadCloser) {
 		if _, temp.itemAsyncErr = io.Copy(temp, readcloser); temp.itemAsyncErr != nil {
+			goto end
+		}
+		if temp.itemAsyncErr = temp.Sync(); temp.itemAsyncErr != nil {
 			goto end
 		}
 	end:
