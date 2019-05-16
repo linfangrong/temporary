@@ -66,7 +66,7 @@ func NewTemporary(reader io.Reader, maxBufferSize int64, fileDir string, filePat
 	if _, err = io.Copy(temp, reader); err != nil {
 		return
 	}
-	if err = temp.Sync(); err != nil {
+	if err = temp.item.Sync(); err != nil {
 		return
 	}
 	return temp, nil
@@ -87,7 +87,7 @@ func NewAsyncTemporary(reader io.Reader, maxBufferSize int64, fileDir string, fi
 		if _, temp.itemAsyncErr = io.Copy(temp, reader); temp.itemAsyncErr != nil {
 			goto end
 		}
-		if temp.itemAsyncErr = temp.Sync(); temp.itemAsyncErr != nil {
+		if temp.itemAsyncErr = temp.item.Sync(); temp.itemAsyncErr != nil {
 			goto end
 		}
 	end:
@@ -111,7 +111,7 @@ func NewMustCloseReaderAsyncTemporary(readcloser io.ReadCloser, maxBufferSize in
 		if _, temp.itemAsyncErr = io.Copy(temp, readcloser); temp.itemAsyncErr != nil {
 			goto end
 		}
-		if temp.itemAsyncErr = temp.Sync(); temp.itemAsyncErr != nil {
+		if temp.itemAsyncErr = temp.item.Sync(); temp.itemAsyncErr != nil {
 			goto end
 		}
 	end:
