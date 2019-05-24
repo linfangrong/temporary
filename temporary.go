@@ -2,6 +2,7 @@ package temporary
 
 import (
 	"io"
+	"io/ioutil"
 	"sync"
 )
 
@@ -115,6 +116,7 @@ func NewMustCloseReaderAsyncTemporary(readcloser io.ReadCloser, maxBufferSize in
 			goto end
 		}
 	end:
+		io.Copy(ioutil.Discard, readcloser)
 		readcloser.Close()
 		temp.itemWg.Done()
 	}(temp, readcloser)
