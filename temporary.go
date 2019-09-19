@@ -1,3 +1,16 @@
+// https://github.com/linfangrong/temporary
+
+/*
+将io.Reader转换成io.ReadSeeker。
+
+功能
+	1. 超过一定大小、将临时缓冲转成临时文件
+	2. 异步读取源信息
+	3. 异步读取源信息后关闭
+Attention
+	使用异步读取数据时候, 在调用其他方法之前一定要先使用Await。
+	该操作等待全部数据的加载, 同时可以处理读取数据时的错误。
+*/
 package temporary
 
 import (
@@ -5,18 +18,6 @@ import (
 	"io/ioutil"
 	"sync"
 )
-
-/**
- * 主要用途, 将io.Reader转换成io.ReadSeeker。
- *
- * 功能
- * 1. 超过一定大小、将临时缓冲转成临时文件
- * 2. 异步读取源信息
- * 3. 异步读取源信息后关闭
- * Attention
- * 使用异步读取数据时候, 在调用其他方法之前一定要先使用Await。
- * 该操作等待全部数据的加载, 同时可以处理读取数据时的错误。
- **/
 
 type Temporary interface {
 	Await() error
